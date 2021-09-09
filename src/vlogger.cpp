@@ -4,6 +4,8 @@
 
 #include "vlogger.h"
 #include <algorithm>
+#include <iostream>
+#include <ctime>
 #include <sstream>
 
 namespace vlogger
@@ -72,7 +74,15 @@ namespace vlogger
     template<typename... Types>
     void VLogger::log(LogLevel logLevel, std::string message, Types... args)
     {
+        std::string NowTime;
+        std::time_t now;
+        struct tm nowLocal;
+        now = time(NULL); 
+        nowLocal =* localtime(&now);
+        std::stringstream ss;
+        ss << nowLocal.tm_hour << ':' << nowLocal.tm_min << ':' << nowLocal.tm_sec << ' ';
         std::string messageToLog = "";
+        messageToLog.append(ss.str());
         messageToLog.append(getHeaderLogLevel(logLevel));
 
         std::vector<std::string> tokenizedMessage = tokenize(message, kDelimiter);
